@@ -442,16 +442,6 @@ public class MediaLibraryModule: Module, PhotoLibraryObserverHandler {
     videoOptions.isNetworkAccessAllowed = options.shouldDownloadFromNetwork
 
     PHImageManager.default().requestAVAsset(forVideo: asset, options: videoOptions) { asset, _, info in
-      guard let asset = asset as? AVComposition else {
-        let urlAsset = asset as? AVURLAsset
-        result["localUri"] = urlAsset?.url.absoluteString
-        if !options.shouldDownloadFromNetwork {
-          result["isNetworkAsset"] = info?[PHImageResultIsInCloudKey] ?? false
-        }
-        promise.resolve(result)
-        return
-      }
-
       let directory = self.appContext?.config.cacheDirectory?.appendingPathComponent("MediaLibrary")
       FileSystemUtilities.ensureDirExists(at: directory)
       let videoOutputFileName =
